@@ -1,0 +1,14 @@
+[project]
+name = "beyond-fa-noddi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "scilpy",
+    "torch>=2.6.0",
+    "tractseg>=2.9",
+]
+
+[tool.uv.sources]
+scilpy = { git = "https://github.com/scilus/scilpy.git" }
