@@ -14,14 +14,14 @@ tractseg_dir="${output_dir}/tractseg"
 mkdir -p $tractseg_dir
 
 echo "Running TractSeg..."
-# TractSeg -i $dwi_path -o $tractseg_dir --raw_diffusion_input --bvals $bvals_path --bvecs $bvecs_path --keep_intermediate_files
+TractSeg -i $dwi_path -o $tractseg_dir --raw_diffusion_input --bvals $bvals_path --bvecs $bvecs_path --keep_intermediate_files
 
 # Run FA
 fa_dir="${output_dir}/fa"
 mkdir -p $fa_dir
 
 echo "Running FA..."
-# scil_dti_metrics.py --not_all --mask $tractseg_dir/nodif_brain_mask.nii.gz --fa $fa_dir/fa.nii.gz --md $fa_dir/md.nii.gz --rd $fa_dir/rd.nii.gz --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $dwi_path $bvals_path $bvecs_path -f
+scil_dti_metrics.py --not_all --mask $tractseg_dir/nodif_brain_mask.nii.gz --fa $fa_dir/fa.nii.gz --md $fa_dir/md.nii.gz --rd $fa_dir/rd.nii.gz --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $dwi_path $bvals_path $bvecs_path -f
 
 # Get corresponding metrics
 bundle_roi_dir="${tractseg_dir}/bundle_segmentations"
