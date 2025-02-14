@@ -7,5 +7,4 @@
 . /opt/.venv/bin/activate
 
 # Run the main script with any arguments
-echo $METRIC
-exec /opt/run_metric.sh "$@"
+exec /opt/run_metric.sh

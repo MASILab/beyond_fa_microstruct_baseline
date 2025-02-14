@@ -1,7 +1,7 @@
 [project]
-name = "beyond-fa-noddi"
-version = "0.1.0"
-description = "Add your description here"
+name = "beyond-fa-baseline"
+version = "0.2.0"
+description = "BeyondFA challenge baseline using FA."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
