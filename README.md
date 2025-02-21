@@ -15,7 +15,7 @@ See `Dockerfile` for an example of setting up the Docker container. The Docker c
 To build this Docker container, clone the repository and run the following command in the root directory:
 
 ```bash
-DOCKER_BUILDKIT=1 docker build -t beyondfa_baseline:fa .
+DOCKER_BUILDKIT=1 sudo docker build -t beyondfa_baseline:fa .
 ```
 
 The Docker runs the code from `scripts/entrypoint.sh`.
