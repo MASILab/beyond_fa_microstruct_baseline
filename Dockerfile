@@ -68,11 +68,13 @@ ENV TRACTSEG_WEIGHTS_DIR="/model/tractseg"
 
 # Add a non-root user
 RUN groupadd -r user && useradd --no-log-init -r -g user user
-USER user
 
 # Run entrypoint with environment variables METRIC from Dockerfile
 COPY ./scripts/* /opt
 COPY ./scripts/entrypoint.sh /entrypoint.sh
 RUN chmod +x /opt/run_metric.sh /entrypoint.sh
+RUN chmod 777 /opt
 ENV METRIC=fa
+
+USER user
 ENTRYPOINT ["/entrypoint.sh"]
