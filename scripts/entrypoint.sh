@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Source /etc/profile to load environment variables
 . /etc/profile
@@ -7,5 +7,4 @@
 . /opt/.venv/bin/activate
 
 # Run the main script with any arguments
-echo $METRIC
-exec /opt/run_metric.sh "$@"
+exec /opt/run_metric.sh
