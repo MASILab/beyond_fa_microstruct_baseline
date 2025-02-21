@@ -5,20 +5,26 @@
 # Define metric
 metric=${METRIC:-"fa"}
 
-dwi_files=$(find /input -name "*dwi.nii.gz")
+# Find all dwi.mha files in /input
+dwi_mha_files=$(find /input -name "*dwi.mha")
 
-for dwi_file in $dwi_files; do
-    dwi_path=$dwi_file
-    bval_path="${dwi_path%.nii.gz}.bval"
-    bvec_path="${dwi_path%.nii.gz}.bvec"
-    basename=$(basename $dwi_path .nii.gz)
+for dwi_mha_file in $dwi_mha_files; do
+    # Set up file names
+    json_file="${dwi_mha_file%.mha}.json"
+
+    basename=$(basename $dwi_mha_file .mha)
+    bval_path="/tmp/${basename}.bval"
+    bvec_path="/tmp/${basename}.bvec"
+    nifti_file="/tmp/${basename}.nii.gz"
     output_name="/output/${basename}.json"
 
-    echo $dwi_path
-    echo $bval_path
-    echo $bvec_path
-    echo $output_name
-    echo $metric
+    # Convert dwi.mha to nii.gz
+    echo "Converting $dwi_mha_file to $nifti_file..."
+    python convert_mha_to_nifti.py $dwi_mha_file $nifti_file
+
+    # Convert json to bval and bvec
+    echo "Converting $json_file to $bval_path and $bvec_path..."
+    python convert_json_to_bvalbvec.py $json_file $bval_path $bvec_path
 
     # Define output directory
     output_dir="/tmp/tractseg_fa_output"
@@ -28,7 +34,7 @@ for dwi_file in $dwi_files; do
     tractseg_dir="${output_dir}/${basename}/tractseg"
     mkdir -p $tractseg_dir
     echo "Running TractSeg..."
-    TractSeg -i $dwi_path -o $tractseg_dir --raw_diffusion_input --bvals $bval_path --bvecs $bvec_path --keep_intermediate_files
+    TractSeg -i $nifti_file -o $tractseg_dir --raw_diffusion_input --bvals $bval_path --bvecs $bvec_path --keep_intermediate_files
 
     # Run FA calculation
     fa_dir="${output_dir}/${basename}/metric"
@@ -36,7 +42,7 @@ for dwi_file in $dwi_files; do
     echo "Calculating DTI metrics..."
     scil_dti_metrics.py --not_all --mask $tractseg_dir/nodif_brain_mask.nii.gz \
         --fa $fa_dir/fa.nii.gz --md $fa_dir/md.nii.gz --rd $fa_dir/rd.nii.gz \
-        --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $dwi_path $bval_path $bvec_path -f
+        --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $nifti_file $bval_path $bvec_path -f
 
     # Get corresponding metrics
     echo "Extracting $metric metrics in bundles..."

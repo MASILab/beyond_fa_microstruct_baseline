@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Source /etc/profile to load environment variables
 . /etc/profile
