@@ -6,7 +6,7 @@
 metric=${METRIC:-"fa"}
 
 # Find all dwi.mha files in /input
-dwi_mha_files=$(find /input -name "*dwi.mha")
+dwi_mha_files=$(find /input -name "*.mha")
 
 for dwi_mha_file in $dwi_mha_files; do
     # Set up file names
@@ -16,7 +16,7 @@ for dwi_mha_file in $dwi_mha_files; do
     bval_path="/tmp/${basename}.bval"
     bvec_path="/tmp/${basename}.bvec"
     nifti_file="/tmp/${basename}.nii.gz"
-    output_name="/output/${basename}.json"
+    output_name="/output/features-128.json"
 
     # Convert dwi.mha to nii.gz
     echo "Converting $dwi_mha_file to $nifti_file..."
