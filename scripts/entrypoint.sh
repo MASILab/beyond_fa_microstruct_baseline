@@ -4,7 +4,8 @@
 . /etc/profile
 
 # Activate the virtual environment
-. /opt/.venv/bin/activate
+. /code/.venv/bin/activate
 
 # Run the main script with any arguments
-exec /opt/run_metric.sh
+cd /code/scripts
+exec ./run_metric.sh
