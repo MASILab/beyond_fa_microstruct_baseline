@@ -3,12 +3,12 @@
 # Metric is read from environment variable METRIC
 
 echo "Running BeyondFA baseline..."
-echo "Listing /inputs..."
-ls /inputs
-echo "Listing /inputs/*..."
-ls /inputs/*
-echo "Listing /outputs..."
-ls /outputs/
+echo "Listing /input..."
+ls /input
+echo "Listing /input/*..."
+ls /input/*
+echo "Listing /output..."
+ls /output/
 
 # Define metric
 metric=${METRIC:-"fa"}
