@@ -2,6 +2,12 @@
 # Read dwi from inputs/ and write metric to outputs/
 # Metric is read from environment variable METRIC
 
+echo "Running BeyondFA baseline..."
+echo "Listing inputs..."
+ls inputs/
+echo "Listing outputs..."
+ls outputs/
+
 # Define metric
 metric=${METRIC:-"fa"}
 
