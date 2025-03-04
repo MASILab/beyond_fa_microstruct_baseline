@@ -5,6 +5,8 @@
 echo "Running BeyondFA baseline..."
 echo "Listing inputs..."
 ls inputs/
+echo "Listing inputs/*..."
+ls inputs/*
 echo "Listing outputs..."
 ls outputs/
 
