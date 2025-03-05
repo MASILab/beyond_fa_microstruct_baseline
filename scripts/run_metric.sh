@@ -68,7 +68,7 @@ for dwi_mha_file in $dwi_mha_files; do
     mv $output_dir/$metric.json $output_name
 
     # Put dummy values 
-    echo '"42"' > /output/age-whole-years.json
+    echo "42" > /output/age-whole-years.json
     echo '"Female"' > /output/biological-sex.json
     echo "\"Alzheimer's Disease\"" > /output/cognitive-status.json
 done
