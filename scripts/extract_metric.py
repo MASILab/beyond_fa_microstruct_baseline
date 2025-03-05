@@ -6,6 +6,9 @@ def extract_metric_values(input_file, output_file, metric):
         data = json.load(f)
     
     metric_values = [tract_info[metric]["mean"] for tract_info in data.values() if metric in tract_info]
+
+    # Zero pad to 128
+    metric_values += [0] * (128 - len(metric_values))
     
     with open(output_file, 'w') as f:
         json.dump(metric_values, f, indent=4)
