@@ -67,8 +67,4 @@ for dwi_mha_file in $dwi_mha_files; do
     echo "$metric metrics saved to $output_name!"
     mv $output_dir/$metric.json $output_name
 
-    # Put dummy values 
-    #echo "42" > /output/age-whole-years.json
-    #echo '"Female"' > /output/biological-sex.json
-    #echo "\"Alzheimer's Disease\"" > /output/cognitive-status.json
 done
