@@ -26,7 +26,7 @@ USER user
 COPY --chown=user:user --chmod=755 . /code
 
 # Install Python dependencies using UV
-RUN mkdir /code/.cache/matplotlib
+RUN mkdir -p /code/.cache/matplotlib
 ENV MPLCONFIGDIR=/code/.cache/matplotlib
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
