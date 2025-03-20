@@ -53,7 +53,7 @@ for dwi_mha_file in $dwi_mha_files; do
         --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $nifti_file $bval_path $bvec_path -f
 
     # Get corresponding metrics
-    echo "Extracting $metric metrics in bundles..."
+    echo "Calculating average $metric metric in bundles..."
     bundle_roi_dir="${tractseg_dir}/bundle_segmentations"
     metric_dir=${fa_dir}
 
@@ -61,6 +61,7 @@ for dwi_mha_file in $dwi_mha_files; do
     scil_volume_stats_in_ROI.py --metrics_dir ${fa_dir} $roi_list > ${output_dir}/tensor_metrics.json
 
     # Extract specified metric to JSON
+    echo "Extracting $metric metrics to $output_dir..."
     python extract_metric.py ${output_dir}/tensor_metrics.json $output_dir/$metric.json --metric $metric
 
     # Save the final metric.json to output directory
