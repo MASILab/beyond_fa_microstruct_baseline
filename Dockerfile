@@ -26,6 +26,8 @@ USER user
 COPY --chown=user:user --chmod=755 . /code
 
 # Install Python dependencies using UV
+RUN mkdir /code/.cache/matplotlib
+ENV MPLCONFIGDIR=/code/.cache/matplotlib
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 ENV UV_CACHE_DIR=/code/.cache/uv
@@ -37,8 +39,5 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --frozen --no-install-project --no-dev \
     && uv sync --frozen --no-dev
-
-# Set metric environment variable
-ENV METRIC=fa
 
 ENTRYPOINT ["/code/scripts/entrypoint.sh"]

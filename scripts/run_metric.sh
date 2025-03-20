@@ -11,7 +11,7 @@ echo "Listing /output..."
 ls /output/
 
 # Define metric
-metric=${METRIC:-"fa"}
+metric="fa"
 
 # Find all dwi.mha files in /input
 dwi_mha_files=$(find /input/images/dwi-4d-brain-mri -name "*.mha")
@@ -49,15 +49,21 @@ for dwi_mha_file in $dwi_mha_files; do
     mkdir -p $fa_dir
     echo "Calculating DTI metrics..."
     scil_dti_metrics.py --not_all --mask $tractseg_dir/nodif_brain_mask.nii.gz \
-        --fa $fa_dir/fa.nii.gz --md $fa_dir/md.nii.gz --rd $fa_dir/rd.nii.gz \
-        --ad $fa_dir/ad.nii.gz --ga $fa_dir/ga.nii.gz $nifti_file $bval_path $bvec_path -f
+        --fa $fa_dir/fa.nii.gz $nifti_file $bval_path $bvec_path -f
 
     # Get corresponding metrics
     echo "Calculating average $metric metric in bundles..."
     bundle_roi_dir="${tractseg_dir}/bundle_segmentations"
     metric_dir=${fa_dir}
 
+    # Make json with json["fa"]["mean"] = mena of fa in bundle
     roi_list=$(find $bundle_roi_dir -name "*.nii.gz" | sort)
+    # for roi in $roi_list; do
+    #     bundle_name=$(basename $roi .nii.gz)
+    #     echo "Calculating $metric in $bundle_name..."
+    #     mean_metric=$(fslstats $fa_dir/$metric.nii.gz -k $roi -m)
+    #     echo "{\"$metric\": {\"mean\": $mean_metric}}\n" >> ${output_dir}/tensor_metrics.json
+    # done
     scil_volume_stats_in_ROI.py --metrics_dir ${fa_dir} $roi_list > ${output_dir}/tensor_metrics.json
 
     # Extract specified metric to JSON

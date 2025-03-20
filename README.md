@@ -13,7 +13,7 @@ See `Dockerfile` for an example of setting up the Docker container. The Docker c
 To build this Docker container, clone the repository and run the following command in the root directory:
 
 ```bash
-DOCKER_BUILDKIT=1 sudo docker build -t beyondfa_baseline:v1.1.0 .
+DOCKER_BUILDKIT=1 sudo docker build -t beyondfa_baseline:v1.1.2 .
 ```
 
 The Docker runs the code from `scripts/entrypoint.sh`.
@@ -43,6 +43,6 @@ sudo docker run \
     --volume $input_dir:/input:ro \
     --volume $output_dir:/output \
     --volume "$DOCKER_NOOP_VOLUME":/tmp \
-    beyondfa_baseline:v1.1.0
+    beyondfa_baseline:v1.1.2
 sudo docker volume rm "$DOCKER_NOOP_VOLUME" > /dev/null
 ```
