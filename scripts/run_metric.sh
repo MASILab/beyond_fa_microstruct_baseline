@@ -68,10 +68,10 @@ for dwi_mha_file in $dwi_mha_files; do
 
     # Extract specified metric to JSON
     echo "Extracting $metric metrics to $output_dir..."
-    python extract_metric.py ${output_dir}/tensor_metrics.json $output_dir/$metric.json --metric $metric
+    python extract_metric.py ${output_dir}/tensor_metrics.json $output_dir/fa.json --metric $metric
 
     # Save the final metric.json to output directory
     echo "$metric metrics saved to $output_name!"
-    mv $output_dir/$metric.json $output_name
+    mv $output_dir/fa.json $output_name
 
 done
