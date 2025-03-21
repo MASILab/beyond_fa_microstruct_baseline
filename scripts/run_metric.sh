@@ -58,17 +58,24 @@ for dwi_mha_file in $dwi_mha_files; do
 
     # Make json with json["fa"]["mean"] = mena of fa in bundle
     roi_list=$(find $bundle_roi_dir -name "*.nii.gz" | sort)
-    # for roi in $roi_list; do
-    #     bundle_name=$(basename $roi .nii.gz)
-    #     echo "Calculating $metric in $bundle_name..."
-    #     mean_metric=$(fslstats $fa_dir/$metric.nii.gz -k $roi -m)
-    #     echo "{\"$metric\": {\"mean\": $mean_metric}}\n" >> ${output_dir}/tensor_metrics.json
-    # done
-    scil_volume_stats_in_ROI.py --metrics_dir ${fa_dir} $roi_list > ${output_dir}/tensor_metrics.json
+    for roi in $roi_list; do
+        bundle_name=$(basename $roi .nii.gz)
+        echo "Calculating $metric in $bundle_name..."
+
+        # Is sum of mask > 0?
+        mask_sum=$(fslstats $roi -V | awk '{print $1}')
+        if [ $mask_sum -eq 0 ]; then
+            echo "$bundle_name,0" >> ${output_dir}/tensor_metrics.json
+        else
+            mean_metric=$(fslstats $fa_dir/$metric.nii.gz -k $roi -m)
+            echo "$bundle_name,$mean_metric" >> ${output_dir}/tensor_metrics.json
+        fi
+    done
+    # scil_volume_stats_in_ROI.py --metrics_dir ${fa_dir} $roi_list > ${output_dir}/tensor_metrics.json
 
     # Extract specified metric to JSON
     echo "Extracting $metric metrics to $output_dir..."
-    python extract_metric.py ${output_dir}/tensor_metrics.json $output_dir/fa.json --metric $metric
+    python extract_metric.py ${output_dir}/tensor_metrics.json $output_dir/fa.json
 
     # Save the final metric.json to output directory
     echo "$metric metrics saved to $output_name!"
