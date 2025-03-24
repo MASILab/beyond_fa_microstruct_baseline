@@ -1,29 +1,14 @@
-# mrtrix includes fsl, mrtrix, freesurfer, ants, art
 FROM mrtrix3/mrtrix3:latest
 
 # Copy uv binaries to install Python
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Add FSL and mrtrix3 to path
-RUN echo 'export PATH="/opt/fsl/bin:/opt/mrtrix3/bin:$PATH"' >> /etc/profile.d/path.sh \
-&& chmod +x /etc/profile.d/path.sh
-
-# Install scilpy & tractseg dependencies
-RUN apt-get update && apt-get install -y \
-    git wget build-essential libblas-dev liblapack-dev \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-ENV SETUPTOOLS_USE_DISTUTILS=stdlib
-
-# Download TractSeg weights
-RUN mkdir -p /model/tractseg \
-    && wget -O /model/tractseg/pretrained_weights_tract_segmentation_v3.npz \
-    https://zenodo.org/records/3518348/files/best_weights_ep220.npz?download=1
-ENV TRACTSEG_WEIGHTS_DIR="/model/tractseg"
-
 # Add a non-root user
 RUN groupadd -r user && useradd --no-log-init -r -g user user
-USER user
-COPY --chown=user:user --chmod=755 . /code
+
+# Copy code as root first
+COPY . /code
+RUN chown -R user:user /code
 
 # Install Python dependencies using UV
 RUN mkdir -p /code/.cache/matplotlib
@@ -40,4 +25,11 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev \
     && uv sync --frozen --no-dev
 
-ENTRYPOINT ["/code/scripts/entrypoint.sh"]
+# Create entrypoint script that handles permissions
+RUN echo '#!/bin/bash\n\
+mkdir -p /output\n\
+chown -R user:user /output\n\
+exec "$@"' > /entrypoint.sh && chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/code/scripts/entrypoint.sh"]

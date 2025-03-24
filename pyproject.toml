@@ -1,15 +1,10 @@
 [project]
-name = "beyond-fa-baseline"
-version = "0.2.0"
-description = "BeyondFA challenge baseline using FA."
+name = "beyond-fa-randomvector"
+version = "0.1.0"
+description = "BeyondFA challenge random vector"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "scilpy",
+    "numpy",
     "simpleitk>=2.4.1",
-    "torch>=2.6.0",
-    "tractseg>=2.9",
 ]
-
-[tool.uv.sources]
-scilpy = { git = "https://github.com/scilus/scilpy.git" }
