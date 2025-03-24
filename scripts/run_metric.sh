@@ -2,6 +2,8 @@
 # Read dwi from inputs/ and write metric to outputs/
 # Metric is read from environment variable METRIC
 
+set -e
+
 echo "Running BeyondFA baseline..."
 echo "Listing /input..."
 ls /input
@@ -38,11 +40,19 @@ for dwi_mha_file in $dwi_mha_files; do
     output_dir="/tmp/tractseg_fa_output"
     mkdir -p $output_dir
 
-    # Run TractSeg
+    # Create mask, response, FODs, and peaks
     tractseg_dir="${output_dir}/${basename}/tractseg"
     mkdir -p $tractseg_dir
+
+    echo "Creating mask, response, FODs, and peaks..."
+    dwi2mask $nifti_file $tractseg_dir/nodif_brain_mask.nii.gz -fslgrad $bvec_path $bval_path
+    dwi2response fa $nifti_file $tractseg_dir/response.txt -fslgrad $bvec_path $bval_path
+    dwi2fod csd $nifti_file $tractseg_dir/response.txt $tractseg_dir/WM_FODs.nii.gz -mask $tractseg_dir/nodif_brain_mask.nii.gz -fslgrad $bvec_path $bval_path
+    sh2peaks $tractseg_dir/WM_FODs.nii.gz $tractseg_dir/peaks.nii.gz -mask $tractseg_dir/nodif_brain_mask.nii.gz -fast
+
+    # Run TractSeg
     echo "Running TractSeg..."
-    TractSeg -i $nifti_file -o $tractseg_dir --raw_diffusion_input --bvals $bval_path --bvecs $bvec_path --keep_intermediate_files
+    TractSeg -i $tractseg_dir/peaks.nii.gz  -o $tractseg_dir --bvals $bval_path --bvecs $bvec_path --keep_intermediate_files --brain_mask $tractseg_dir/nodif_brain_mask.nii.gz
 
     # Run FA calculation
     fa_dir="${output_dir}/${basename}/metric"
