@@ -1,5 +1,15 @@
 # Beyond FA Baseline
 
+
+<img src="https://github.com/MASILab/beyondFA_mlp/blob/main/4.png" alt="Challenge Logo" width="300">
+
+## Challenge overview
+We provide the overall structure of our challenge below. Participants are only responisble for the green "Participant Docker" oval -- everything else is provided on the [Beyond FA grand-challenge site](https://bfa.grand-challenge.org/).
+
+![alt text][ChallengeArchitecture]
+
+[ChallengeArchitecture]: https://github.com/MASILab/beyondFA_mlp/blob/main/fig2.png "Challenge Architecture"
+
 Here is an example repository for the Beyond FA challenge. This model calculates fractional anisotropy (FA) from the diffusion MRI, then finds the average value of FA in regions defined by [TractSeg](https://github.com/MIC-DKFZ/TractSeg).
 
 ## Building the Docker
